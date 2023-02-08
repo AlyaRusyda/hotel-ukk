@@ -71,7 +71,7 @@ exports.addPemesanan = async (request, response) => {
           let detailsOfPemesanan = request.body.details_of_pemesanan;
 
           for (let i = 0; i < detailsOfPemesanan.length; i++) {
-            detailsOfPemesanan[i].id_pemesanan = pemesananID;
+            detailsOfPemesanan[i].pemesananId = pemesananID;
           }
 
           let newDetail = {
@@ -199,7 +199,7 @@ exports.deletePemesanan = async (request, response) => {
 
   detailsOfPemesananModel
     .destroy({
-      where: { id_pemesanan: pemesananID },
+      where: { id: pemesananID },
     })
     .then((result) => {
       pemesananModel
