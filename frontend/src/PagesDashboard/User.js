@@ -131,8 +131,7 @@ export default class User extends React.Component {
       password: this.state.password,
       role: this.state.role,
     };
-
-    console.log(data);
+    // console.log(data);
     if (this.state.action === "insert") {
       let url = "http://localhost:3000/user/";
       axios
@@ -162,7 +161,7 @@ export default class User extends React.Component {
   };
 
   handleDrop = (id) => {
-    let url = "http://localhost:3000/user/" + id;
+    let url = "http://localhost:3000/user/" + id
     if (window.confirm("Are you sure to delete this customer ? ")) {
       axios
         .delete(url, this.headerConfig())
@@ -350,7 +349,7 @@ export default class User extends React.Component {
                                   <button
                                     class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
                                     onClick={() =>
-                                      this.handleDrop(item.id_user)
+                                      this.handleDrop(item.id)
                                     }
                                   >
                                     <FontAwesomeIcon icon={faTrash} size="lg" />
