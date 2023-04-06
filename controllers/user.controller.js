@@ -74,17 +74,17 @@ exports.getAllUser = async (request, response) => {
 
 //mendaptkan salah satu data dalam tabel (where clause)
 exports.findUser = async (request, response) => {
-  let nama = request.body.nama;
-  let email = request.body.email;
-  
+  let keyword = request.body.keyword;
+  console.log(keyword)
   let user = await userModel.findOne({
     where: {
       [Op.or]: [
-        { nama_user: { [Op.substring]: nama } },
-        { email: { [Op.substring]: email } }
+        { nama_user: { [Op.substring]: keyword } },
+        { email: { [Op.substring]: keyword } }
       ],
     },
   });
+  console.log(user)
   return response.json({
     success: true,
     data: user,

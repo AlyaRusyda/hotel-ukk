@@ -36,26 +36,54 @@ exports.findKamar = async (request, response) => {
 };
 
 exports.addKamar = async (request, response) => {
-  let newKamar = {
-    nomor_kamar: request.body.nomor_kamar,
-    tipeKamarId: request.body.tipeKamarId,
-  };
-  let tipe_kamar = await tipe_kamarModel.findOne({
+  let nama_tipe_kamar = request.body.nama_tipe_kamar;
+  let tipeId = await tipe_kamarModel.findOne({
     where: {
-      id: newKamar.tipeKamarId,
+      [Op.and]: [{ nama_tipe_kamar: { [Op.substring]: nama_tipe_kamar } }],
     },
   });
-  console.log(tipe_kamar.id);
-  let tes = newKamar.tipeKamarId == tipe_kamar.id;
-  console.log(tes);
-  if (tes) {
+  console.log(tipeId);
+
+  if (tipeId === null) {
+    return response.json({
+      success: false,
+      message: `Tipe kamar yang anda inputkan tidak ada`,
+    });
+  } else {
+    let newRoom = {
+      nomor_kamar: request.body.nomor_kamar,
+      tipeKamarId: tipeId.id,
+    };
+
+    if (newRoom.nomor_kamar === "" || nama_tipe_kamar === "") {
+      return response.json({
+        success: false,
+        message: `Mohon diisi semua`,
+      });
+    }
+
+    let kamars = await kamarModel.findAll({
+      where: {
+        [Op.and]: [
+          { nomor_kamar: newRoom.nomor_kamar },
+          { tipeKamarId: newRoom.tipeKamarId },
+        ],
+      },
+      attributes: ["id", "nomor_kamar", "tipeKamarId"],
+    });
+    if (kamars.length > 0) {
+      return response.json({
+        success: false,
+        message: `Kamar yang anda inputkan sudah ada`,
+      });
+    }
     kamarModel
-      .create(newKamar)
+      .create(newRoom)
       .then((result) => {
         return response.json({
           success: true,
           data: result,
-          message: `New room has been inserted`,
+          message: `New Room has been inserted`,
         });
       })
       .catch((error) => {
@@ -64,11 +92,6 @@ exports.addKamar = async (request, response) => {
           message: error.message,
         });
       });
-  } else {
-    return response.json({
-      success: false,
-      message: "Room types doesn't exist",
-    });
   }
 };
 

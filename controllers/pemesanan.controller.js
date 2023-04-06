@@ -49,7 +49,7 @@ exports.addPemesanan = async (request, response) => {
       nomor_pemesanan: request.body.nomor_pemesanan,
       nama_pemesan: request.body.nama_pemesan,
       email_pemesan: request.body.email_pemesan,
-      tgl_pemesanan: request.body.tanggal_pemesanan,
+      tgl_pemesanan: Date.now(),
       tgl_check_in: request.body.check_in,
       tgl_check_out: request.body.check_out,
       nama_tamu: request.body.nama_tamu,
@@ -71,7 +71,7 @@ exports.addPemesanan = async (request, response) => {
           let detailsOfPemesanan = request.body.details_of_pemesanan;
 
           for (let i = 0; i < detailsOfPemesanan.length; i++) {
-            detailsOfPemesanan[i].id_pemesanan = pemesananID;
+            detailsOfPemesanan[i].pemesananId = pemesananID;
           }
 
           let newDetail = {
@@ -199,7 +199,7 @@ exports.deletePemesanan = async (request, response) => {
 
   detailsOfPemesananModel
     .destroy({
-      where: { id_pemesanan: pemesananID },
+      where: { id: pemesananID },
     })
     .then((result) => {
       pemesananModel
