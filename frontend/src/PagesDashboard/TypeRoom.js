@@ -156,7 +156,7 @@ export default class TypeRoom extends React.Component {
             keyword: this.state.keyword,
         }
         let url = "http://localhost:3000/tipekamar/find/"
-        axios.post(url, data)
+        axios.post(url, data, this.headerConfig())
             .then(response => {
                 if (response.status === 200) {
                     this.setState({

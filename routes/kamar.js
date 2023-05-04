@@ -17,8 +17,8 @@ const auth = require(`../auth/auth`)
 app.get("/getAll", auth.authVerify,roomController.getAllKamar)
 app.post("/getAvailable", auth.authVerify,roomController.availableRoom)
 app.post("/find", auth.authVerify,roomController.findKamar)
-app.post("/", auth.authVerify,roomController.addKamar)
+app.post("/add", auth.authVerify,roomController.addKamar)
 app.delete("/:id",auth.authVerify, roomController.deleteKamar)
-app.put("/:id", auth.authVerify,roomController.updateKamar)
+app.put("/update/:id", auth.authVerify,roomController.updateKamar)
 
 module.exports=app

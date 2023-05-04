@@ -11,16 +11,19 @@ import {
 import axios from "axios";
 import $ from "jquery";
 
-export default class User extends React.Component {
+export default class Room extends React.Component {
   constructor() {
     super();
     this.state = {
-      user: [],
+      room: [],
+      typeroom: [],
       id: "",
-      nama_user: "",
+      nomor_kamar: "",
+      tipeKamarId: "",
+      nama_tipe_kamar: "",
+      harga: "",
+      deskripsi: "",
       foto: "",
-      email: "",
-      password: "",
       role: "",
       token: "",
       action: "",
@@ -55,26 +58,20 @@ export default class User extends React.Component {
   };
 
   handleClose = () => {
-    $("#modal_user").hide();
-  };
-
-  handleFile = (e) => {
-    this.setState({
-      foto: e.target.files[0],
-    });
+    $("#modal_room").hide();
   };
 
   _handleFilter = () => {
     let data = {
       keyword: this.state.keyword,
     };
-    let url = "http://localhost:3000/user/find/";
+    let url = "http://localhost:3000/kamar/find/";
     axios
-      .post(url, data, this.headerConfig())
+      .post(url, data)
       .then((response) => {
         if (response.status === 200) {
           this.setState({
-            user: response.data.data,
+            room: response.data.data,
           });
         } else {
           alert(response.data.message);
@@ -87,27 +84,21 @@ export default class User extends React.Component {
   };
 
   handleAdd = () => {
-    $("#modal_user").show();
+    $("#modal_room").show();
     this.setState({
       id: "",
-      nama_user: "",
-      foto: "",
-      email: "",
-      password: "",
-      role: "",
+      nomor_kamar: "",
+      tipeKamarId: "",
       action: "insert",
     });
   };
 
   handleEdit = (item) => {
-    $("#modal_user").show();
+    $("#modal_room").show();
     this.setState({
       id: item.id,
-      nama_user: item.nama_user,
-      foto: item.foto,
-      email: item.email,
-      password: item.password,
-      role: item.role,
+      nomor_kamar: item.nomor_kamar,
+      tipeKamarId: item.tipeKamarId,
       action: "update",
     });
   };
@@ -115,20 +106,18 @@ export default class User extends React.Component {
   handleSave = (e) => {
     e.preventDefault();
 
-    let form = new FormData();
-    form.append("id", this.state.id);
-    form.append("nama_user", this.state.nama_user);
-    form.append("foto", this.state.foto);
-    form.append("email", this.state.email);
-    form.append("password", this.state.password);
-    form.append("role", this.state.role);
+    let form = {
+      id: this.state.id,
+      nomor_kamar: this.state.nomor_kamar,
+      tipeKamarId: this.state.tipeKamarId,
+    };
 
     if (this.state.action === "insert") {
-      let url = "http://localhost:3000/user/add/";
+      let url = "http://localhost:3000/kamar/add";
       axios
         .post(url, form, this.headerConfig())
         .then((response) => {
-          this.getUser();
+          this.getRoom();
           this.handleClose();
         })
         .catch((error) => {
@@ -138,11 +127,11 @@ export default class User extends React.Component {
           }
         });
     } else {
-      let url = "http://localhost:3000/user/" + this.state.id;
+      let url = "http://localhost:3000/kamar/update/" + this.state.id;
       axios
         .put(url, form, this.headerConfig())
         .then((response) => {
-          this.getUser();
+          this.getRoom();
           this.handleClose();
         })
         .catch((error) => {
@@ -152,13 +141,13 @@ export default class User extends React.Component {
   };
 
   handleDrop = (id) => {
-    let url = "http://localhost:3000/user/" + id
-    if (window.confirm("Are you sure to delete this customer ? ")) {
+    let url = "http://localhost:3000/kamar/delete/" + id;
+    if (window.confirm("Are you sure to delete this room")) {
       axios
         .delete(url, this.headerConfig())
         .then((response) => {
           console.log(response.data.message);
-          this.getUser();
+          this.getRoom();
         })
         .catch((error) => {
           if (error.response.status === 500) {
@@ -168,15 +157,29 @@ export default class User extends React.Component {
     }
   };
 
-  getUser = () => {
-    let url = "http://localhost:3000/user/getAll";
+  getRoom = () => {
+    let url = "http://localhost:3000/kamar/getAll/";
     axios
       .get(url, this.headerConfig())
       .then((response) => {
         this.setState({
-          user: response.data.data,
+          room: response.data.data,
         });
-        console.log(response);
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  getTypeRoom = () => {
+    let url = "http://localhost:3000/tipekamar/getAll";
+    axios
+      .get(url, this.headerConfig())
+      .then((response) => {
+        this.setState({
+          typeroom: response.data.data,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -192,9 +195,9 @@ export default class User extends React.Component {
   };
 
   componentDidMount() {
-    this.getUser();
+    this.getRoom();
+    this.getTypeRoom();
     this.checkRole();
-    this.headerConfig();
   }
 
   render() {
@@ -204,8 +207,8 @@ export default class User extends React.Component {
         <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
           <Header />
           <div class="main-content flex flex-col flex-grow p-4">
-            <h1 class="font-bold text-xl text-black-700">Daftar User</h1>
-            <p class="text-gray-700">For admin and Resepsionis</p>
+            <h1 class="font-bold text-xl text-black-700">Daftar Room</h1>
+            <p class="text-gray-700">For Room in Hotel Slippy</p>
 
             <div className="flex mt-2 flex-row-reverse mr-4">
               <div className="flex rounded w-1/2">
@@ -235,7 +238,7 @@ export default class User extends React.Component {
             </div>
 
             <div className="flex flex-col mt-2 mr-4">
-              <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="-my-2 mx-6 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                   <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -251,25 +254,13 @@ export default class User extends React.Component {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            Foto
+                            Room Number
                           </th>
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            Nama User
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            Email
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                          >
-                            Role
+                            Room Type
                           </th>
                           {this.state.role === "admin" && (
                             <th
@@ -282,74 +273,47 @@ export default class User extends React.Component {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {this.state.user.map((item, index) => {
-                          return (
-                            <tr key={index}>
+                        {this.state.room.map((item, index) => 
+                      {  
+                        return(
+                          
+                          <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {index + 1}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-900">
+                                Room-{item.nomor_kamar}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                  {item.tipe_kamar.nama_tipe_kamar}
+                                  </span>
+                            </td>
+                            {this.state.role === "admin" && (
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">
-                                  {index + 1}
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex-shrink-0 h-10 w-10">
-                                  <img
-                                    className="h-10 w-10 rounded-full"
-                                    src={
-                                      "http://localhost:3000/foto/" +
-                                      item.foto
-                                    }
-                                    alt=""
+                                <button
+                                  class="bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded mr-2"
+                                  onClick={() => this.handleEdit(item)}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faPencilSquare}
+                                    size="lg"
                                   />
-                                </div>
+                                </button>
+                                <button
+                                  class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
+                                  onClick={() => this.handleDrop(item.id)}
+                                >
+                                  <FontAwesomeIcon icon={faTrash} size="lg" />
+                                </button>
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="text-sm font-medium text-gray-900">
-                                    {item.nama_user}
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">
-                                  {item.email}
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                {item.role === "admin" && (
-                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                    {item.role}
-                                  </span>
-                                )}
-                                {item.role === "resepsionis" && (
-                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">
-                                    {item.role}
-                                  </span>
-                                )}
-                              </td>
-                              {this.state.role === "admin" && (
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <button
-                                    class="bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded mr-2"
-                                    onClick={() => this.handleEdit(item)}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faPencilSquare}
-                                      size="lg"
-                                    />
-                                  </button>
-                                  <button
-                                    class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
-                                    onClick={() =>
-                                      this.handleDrop(item.id)
-                                    }
-                                  >
-                                    <FontAwesomeIcon icon={faTrash} size="lg" />
-                                  </button>
-                                </td>
-                              )}
-                            </tr>
-                          );
-                        })}
+                            )}
+                          </tr>
+                        )})}
                       </tbody>
                     </table>
                   </div>
@@ -357,11 +321,10 @@ export default class User extends React.Component {
               </div>
             </div>
           </div>
-
           <footer class="footer px-4 py-2">
             <div class="footer-content">
               <p class="text-sm text-gray-600 text-center">
-                © 2023. All rights reserved.{" "}
+                © Brandname 2023. All rights reserved.
               </p>
             </div>
           </footer>
@@ -369,7 +332,7 @@ export default class User extends React.Component {
 
         {/* Modal Form */}
         <div
-          id="modal_user"
+          id="modal_room"
           tabindex="-1"
           aria-hidden="true"
           class="overflow-x-auto fixed top-0 left-0 right-0 z-50 hidden w-full p-4 md:inset-0 h-modal md:h-full bg-tranparent bg-black bg-opacity-50"
@@ -398,7 +361,7 @@ export default class User extends React.Component {
               </button>
               <div class="px-6 py-6 lg:px-8">
                 <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-black">
-                  Edit User
+                  Edit Room
                 </h3>
                 <form
                   class="space-y-6"
@@ -406,97 +369,45 @@ export default class User extends React.Component {
                 >
                   <div>
                     <label
-                      for="nama_user"
+                      for="nomor_kamar"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
                     >
-                      Username User
+                      Room Number
                     </label>
                     <input
                       type="text"
-                      name="nama_user"
-                      id="nama_user"
-                      value={this.state.nama_user}
+                      name="nomor_kamar"
+                      id="nomor_kamar"
+                      value={this.state.nomor_kamar}
                       onChange={this.handleChange}
                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-800"
-                      placeholder="Masukkan username user"
+                      placeholder="Masukkan number of room"
                       required
                     />
                   </div>
                   <div>
                     <label
-                      for="email"
+                      for="tipeKamarId"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
                     >
-                      Email User
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      value={this.state.email}
-                      onChange={this.handleChange}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-800"
-                      placeholder="Masukkan email user"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label
-                      for="password"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
-                    >
-                      Password User
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      value={this.state.password}
-                      onChange={this.handleChange}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-800"
-                      placeholder="Masukkan email user"
-                      required
-                      disabled={this.state.action === "update" ? true : false}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      for="role"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
-                    >
-                      Role
+                      Room Types
                     </label>
                     <select
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black"
-                      placeholder="Jenis role"
-                      name="role"
-                      value={this.state.role}
+                      placeholder="Jenis Room Type"
+                      name="tipeKamarId"
+                      value={this.state.tipeKamarId}
                       onChange={this.handleChange}
                       required
                     >
-                      <option value="">Pilih Role</option>
-                      <option value="admin">Admin</option>
-                      <option value="resepsionis">Resepsionis</option>
+                      <option value="">Pilih Room Type</option>
+                      {this.state.typeroom.map((item) => (
+                        <option value={item.id}>
+                          {item.nama_tipe_kamar}
+                        </option>
+                      ))}
                     </select>
                   </div>
-                  <div>
-                    <label
-                      for="foto"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
-                    >
-                      Photo User
-                    </label>
-                    <input
-                      type="file"
-                      name="foto"
-                      id="foto"
-                      placeholder="Pilih foto user"
-                      onChange={this.handleFile}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-800 focus:border-gray-800 block w-full px-2 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-800"
-                      required={this.state.action === "update" ? false : true}
-                    />
-                  </div>
-
                   <button
                     type="submit"
                     class="w-full text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"

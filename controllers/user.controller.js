@@ -1,17 +1,17 @@
 const { request, response } = require("express");
 const express = require("express");
 const app = express();
-
 const md5=require("md5")
-
 const userModel = require(`../models/index`).user;
 const Op = require(`sequelize`).Op;
-
 const path = require(`path`);
 const fs = require(`fs`);
-
 const upload = require(`./uploadUser`).single(`foto`);
-
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize("wikuhotel", "root", "", {
+  host: "localhost",
+  dialect: "mysql",
+});
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -68,6 +68,15 @@ exports.getAllUser = async (request, response) => {
   return response.json({
     success: true,
     data: user,
+    message: `All User have been loaded`,
+  });
+};
+
+exports.countUser = async (request, response) => {
+  let user = await sequelize.query("SELECT COUNT(*) FROM users");
+  return response.json({
+    success: true,
+    jumlah_user: user[0],
     message: `All User have been loaded`,
   });
 };

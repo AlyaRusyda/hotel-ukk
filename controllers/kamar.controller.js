@@ -1,7 +1,7 @@
 const { request, response } = require("express");
 const { findTipekamar } = require("./tipe_kamar.controller");
 const kamarModel = require("../models/index").kamar;
-const tipe_kamarModel = require("../models/index").tipe_kamar;
+const tipeKamarModel = require("../models/index").tipe_kamar;
 const Op = require("sequelize").Op;
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize("wikuhotel", "root", "", {
@@ -10,7 +10,12 @@ const sequelize = new Sequelize("wikuhotel", "root", "", {
 });
 
 exports.getAllKamar = async (request, response) => {
-  let kamars = await kamarModel.findAll();
+  let kamars = await kamarModel.findAll({
+    include: {
+      model: tipeKamarModel,
+      attributes: ['nama_tipe_kamar']
+    }
+  });
   return response.json({
     success: true,
     data: kamars,
@@ -37,7 +42,7 @@ exports.findKamar = async (request, response) => {
 
 exports.addKamar = async (request, response) => {
   let nama_tipe_kamar = request.body.nama_tipe_kamar;
-  let tipeId = await tipe_kamarModel.findOne({
+  let tipeId = await tipeKamarModel.findOne({
     where: {
       [Op.and]: [{ nama_tipe_kamar: { [Op.substring]: nama_tipe_kamar } }],
     },
