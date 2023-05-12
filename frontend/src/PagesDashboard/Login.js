@@ -58,30 +58,30 @@ export default class Login extends React.Component {
     render() {
         return (
             <div className="dashboard1">
-                <div class="flex">
-                    <div class="w-1/2 bg-gray-200 text-left">
-                        <form class="bg-gray-100 shadow-md rounded px-8 pt-6 p-8 m-24 mt-30" onSubmit={(e) => this.handleLogin(e)}>
-                            <p class="text-gray-700 text-2xl font-bold mb-8 text-center">Login Dashboard Slippy</p>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                <div className="flex">
+                    <div className="w-1/2 bg-gray-200 text-left">
+                        <form className="bg-gray-100 shadow-md rounded px-8 pt-6 p-8 m-24 mt-30" onSubmit={(e) => this.handleLogin(e)}>
+                            <p className="text-gray-700 text-2xl font-bold mb-8 text-center">Login Dashboard Slippy</p>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" for="email">
                                     Email
                                 </label>
-                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="email_user" name="email_user" placeholder="Email" value={this.state.email_user} onChange={this.handleChange} required />
+                                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="email_user" name="email_user" placeholder="Email" value={this.state.email_user} onChange={this.handleChange} required />
                             </div>
-                            <div class="mb-6">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                            <div className="mb-6">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
                                     Password
                                 </label>
-                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password_user" type="password" placeholder="Password" value={this.state.password_user} onChange={this.handleChange} required />
+                                <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password_user" type="password" placeholder="Password" value={this.state.password_user} onChange={this.handleChange} required />
                             </div>
-                            <div class="flex items-center justify-between">
-                                <button class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 w-full rounded focus:outline-none focus:shadow-outline" type="submit">
+                            <div className="flex items-center justify-between">
+                                <button className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 w-full rounded focus:outline-none focus:shadow-outline" type="submit">
                                     Login
                                 </button>
                             </div>
                         </form>
                     </div>
-                    <div class="w-1/2 bg-gray-500 text-center">
+                    <div className="w-1/2 bg-gray-500 text-center">
                         <img src="/assets/loginnn.jpeg" className="w-screen h-screen" alt="" />
                     </div>
                 </div>

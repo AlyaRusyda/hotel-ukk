@@ -39,12 +39,12 @@ export default class Navbar extends Component {
 
     render() {
         return (
-            <nav class="bg-gray-50 px-5 sm:px-8 w-full z-20 top-0 left-0 drop-shadow-md md:drop-shadow-xl">
-                <div class="container flex flex-wrap items-center justify-between mx-auto">
+            <nav className="bg-gray-50 px-5 sm:px-8 w-full z-20 top-0 left-0 drop-shadow-md md:drop-shadow-xl">
+                <div className="container flex flex-wrap items-center justify-between mx-auto">
                     <NavLink to="/home" className="hidden lg:block h-10 ml-3 w-10 mr-0 ">
                         <img src="/assets/logo.png" alt="icon" />
                     </NavLink>
-                    <div class="flex md:order-2">
+                    <div className="flex md:order-2">
                         {this.state.isLogin ? (
                             <>
                                 {/* <NavLink to="/home" className="no-underline text-gray-800 hover:text-blue-800 px-3 py-2 rounded-md text-2xl font-medium" aria-current="page" id="profile"><FontAwesomeIcon icon={faUser} /></NavLink> */}
@@ -60,8 +60,8 @@ export default class Navbar extends Component {
                         )
                         }
                     </div>
-                    <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-                        <ul class="flex flex-col p-4 mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white">
+                    <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                        <ul className="flex flex-col p-4 mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white">
                             {this.state.isLogin ? (
                                 <>
                                     <NavLink to="/home" className="no-underline text-gray-800 hover:bg-blue-500 hover:text-white px-3 py-3 rounded-md text-sm font-medium" aria-current="page">Home</NavLink>

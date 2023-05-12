@@ -72,14 +72,14 @@ exports.getAllUser = async (request, response) => {
   });
 };
 
-exports.countUser = async (request, response) => {
-  let user = await sequelize.query("SELECT COUNT(*) FROM users");
-  return response.json({
-    success: true,
-    jumlah_user: user[0],
-    message: `All User have been loaded`,
-  });
-};
+// exports.countUser = async (request, response) => {
+//   let user = await sequelize.query("SELECT COUNT(*) FROM users");
+//   return response.json({
+//     success: true,
+//     jumlah_user: user[0],
+//     message: `All User have been loaded`,
+//   });
+// };
 
 //mendaptkan salah satu data dalam tabel (where clause)
 exports.findUser = async (request, response) => {

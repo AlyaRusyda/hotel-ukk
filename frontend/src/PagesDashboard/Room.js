@@ -202,13 +202,13 @@ export default class Room extends React.Component {
 
   render() {
     return (
-      <div class="flex flex-row min-h-screen bg-gray-100 text-gray-800">
+      <div className="flex flex-row min-h-screen bg-gray-100 text-gray-800">
         <Sidebar />
-        <main class="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
+        <main className="main flex flex-col flex-grow -ml-64 md:ml-0 transition-all duration-150 ease-in">
           <Header />
-          <div class="main-content flex flex-col flex-grow p-4">
-            <h1 class="font-bold text-xl text-black-700">Daftar Room</h1>
-            <p class="text-gray-700">For Room in Hotel Slippy</p>
+          <div className="main-content flex flex-col flex-grow p-4">
+            <h1 className="font-bold text-xl text-black-700">Daftar Room</h1>
+            <p className="text-gray-700">For Room in Hotel Slippy</p>
 
             <div className="flex mt-2 flex-row-reverse mr-4">
               <div className="flex rounded w-1/2">
@@ -290,13 +290,13 @@ export default class Room extends React.Component {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                                  {item.tipe_kamar.nama_tipe_kamar}
+                                {item.tipe_kamar?.nama_tipe_kamar}
                                   </span>
                             </td>
                             {this.state.role === "admin" && (
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <button
-                                  class="bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded mr-2"
+                                  className="bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded mr-2"
                                   onClick={() => this.handleEdit(item)}
                                 >
                                   <FontAwesomeIcon
@@ -305,7 +305,7 @@ export default class Room extends React.Component {
                                   />
                                 </button>
                                 <button
-                                  class="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
+                                  className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
                                   onClick={() => this.handleDrop(item.id)}
                                 >
                                   <FontAwesomeIcon icon={faTrash} size="lg" />
@@ -321,9 +321,9 @@ export default class Room extends React.Component {
               </div>
             </div>
           </div>
-          <footer class="footer px-4 py-2">
-            <div class="footer-content">
-              <p class="text-sm text-gray-600 text-center">
+          <footer className="footer px-4 py-2">
+            <div className="footer-content">
+              <p className="text-sm text-gray-600 text-center">
                 © Brandname 2023. All rights reserved.
               </p>
             </div>
@@ -335,18 +335,18 @@ export default class Room extends React.Component {
           id="modal_room"
           tabindex="-1"
           aria-hidden="true"
-          class="overflow-x-auto fixed top-0 left-0 right-0 z-50 hidden w-full p-4 md:inset-0 h-modal md:h-full bg-tranparent bg-black bg-opacity-50"
+          className="overflow-x-auto fixed top-0 left-0 right-0 z-50 hidden w-full p-4 md:inset-0 h-modal md:h-full bg-tranparent bg-black bg-opacity-50"
         >
-          <div class="flex lg:h-auto w-auto justify-center ">
-            <div class="relative bg-white rounded-lg shadow dark:bg-white w-1/3">
+          <div className="flex lg:h-auto w-auto justify-center ">
+            <div className="relative bg-white rounded-lg shadow dark:bg-white w-1/3">
               <button
                 type="button"
-                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                 onClick={() => this.handleClose()}
               >
                 <svg
                   aria-hidden="true"
-                  class="w-5 h-5"
+                  className="w-5 h-5"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
@@ -357,20 +357,20 @@ export default class Room extends React.Component {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span class="sr-only">Tutup modal</span>
+                <span className="sr-only">Tutup modal</span>
               </button>
-              <div class="px-6 py-6 lg:px-8">
-                <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-black">
+              <div className="px-6 py-6 lg:px-8">
+                <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-black">
                   Edit Room
                 </h3>
                 <form
-                  class="space-y-6"
+                  className="space-y-6"
                   onSubmit={(event) => this.handleSave(event)}
                 >
                   <div>
                     <label
                       for="nomor_kamar"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
                     >
                       Room Number
                     </label>
@@ -380,7 +380,7 @@ export default class Room extends React.Component {
                       id="nomor_kamar"
                       value={this.state.nomor_kamar}
                       onChange={this.handleChange}
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-800"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-800"
                       placeholder="Masukkan number of room"
                       required
                     />
@@ -388,7 +388,7 @@ export default class Room extends React.Component {
                   <div>
                     <label
                       for="tipeKamarId"
-                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
                     >
                       Room Types
                     </label>
@@ -410,7 +410,7 @@ export default class Room extends React.Component {
                   </div>
                   <button
                     type="submit"
-                    class="w-full text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                    className="w-full text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                   >
                     Simpan
                   </button>
