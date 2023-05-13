@@ -155,46 +155,12 @@ exports.updatePemesanan = async (request, response) => {
       });
     }
 
-    let roomCheck = await sequelize.query(
-      `SELECT * FROM detail_pemesanans WHERE kamarId = ${room.id} AND tgl_akses >= "${request.body.check_in}" AND tgl_akses <= "${request.body.check_out}" ;`
-    );
+    await existingPemesanan.update(newData);
 
-    if (roomCheck[0].length === 0) {
-      const tglCheckIn = new Date(request.body.check_in);
-      const tglCheckOut = new Date(request.body.check_out);
-      const diffTime = Math.abs(tglCheckOut - tglCheckIn);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-      await existingPemesanan.update(newData);
-
-      await detailsOfPemesananModel.destroy({
-        where: { pemesananId: pemesananID },
-      });
-
-      let detailsOfPemesanan = [];
-
-      for (let i = 0; i < diffDays; i++) {
-        let newDetail = {
-          pemesananId: pemesananID,
-          kamarId: room.id,
-          tgl_akses: new Date(tglCheckIn.getTime() + i * 24 * 60 * 60 * 1000),
-          harga: request.body.harga, // Ubah ini dengan logika perhitungan harga yang sesuai
-        };
-        detailsOfPemesanan.push(newDetail);
-      }
-
-      await detailsOfPemesananModel.bulkCreate(detailsOfPemesanan);
-
-      return response.json({
-        success: true,
-        message: `Pemesanan dengan ID ${pemesananID} berhasil diperbarui`,
-      });
-    } else {
-      return response.json({
-        success: false,
-        message: `Kamar yang anda pesanan sudah di booking`,
-      });
-    }
+    return response.json({
+      success: true,
+      message: `Pemesanan dengan ID ${pemesananID} berhasil diperbarui`,
+    });
   } catch (error) {
     return response.json({
       success: false,
@@ -203,13 +169,14 @@ exports.updatePemesanan = async (request, response) => {
   }
 };
 
+
 //delete data
 exports.deletePemesanan = async (request, response) => {
   let pemesananID = request.params.id;
 
   detailsOfPemesananModel
     .destroy({
-      where: { id: pemesananID },
+      where: { pemesananId: pemesananID },
     })
     .then((result) => {
       pemesananModel
@@ -262,3 +229,46 @@ exports.find = async (request, response) => {
     message: `Transaction have been loaded`,
   });
 };
+
+exports.updateStatusBooking = async (req, res) => {
+  try {
+    const params = { id: req.params.id };
+
+    const result = await pemesananModel.findOne({ where: params });
+    if (!result) {
+      return res.status(404).json({
+        message: "Data not found!",
+      });
+    }
+
+    const data = {
+      status_pemesanan: req.body.status_pemesanan,
+    };
+
+    if (data.status_pemesanan === "check_out") {
+      await pemesananModel.update(data, { where: params });
+
+      const updateTglAccess = {
+        tgl_akses: null,
+      };
+      await detailsOfPemesananModel.update(updateTglAccess, { where: params });
+      return res.status(200).json({
+        message: "Success update status booking to check out",
+        code: 200,
+      });
+    }
+
+    await pemesananModel.update(data, { where: params });
+    return res.status(200).json({
+      message: "Success update status booking",
+      code: 200,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Internal error",
+      err: err,
+    });
+  }
+};
+

@@ -96,7 +96,7 @@ export default class Sidebar extends React.Component {
                                 <span className="ml-4">User</span>
                             </a>
                         </li>
-                        <li className="my-px">
+                        {/* <li className="my-px">
                             <a
                                 href="/customer"
                                 className="flex flex-row items-center h-10 px-3 rounded-lg text-blue-600 hover:bg-blue-100 hover:text-blue-800 font-base"
@@ -106,7 +106,7 @@ export default class Sidebar extends React.Component {
                                 </span>
                                 <span className="ml-2">Customer</span>
                             </a>
-                        </li>
+                        </li> */}
                         <li className="my-px">
                             <a
                                 href="/historytransaksi"

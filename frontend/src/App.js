@@ -5,8 +5,8 @@ import Dashboard from './PagesDashboard/Dashboard'
 import TypeRoom from "./PagesDashboard/TypeRoom";
 import Room from "./PagesDashboard/Room";
 import User from "./PagesDashboard/User";
+import HistoryTransaksi from "./PagesDashboard/HistoryTransaksi";
 // import Customer from "./PagesDashboard/Customer";
-// import HistoryTransaksi from "./PagesDashboard/HistoryTransaksi";
 
 // import LoginCust from "./PagesForCust/Login";
 // import RegisterCust from "./PagesForCust/Register";
@@ -26,8 +26,8 @@ function App() {
         <Route path="/typeroom" element={<TypeRoom />}></Route>
         <Route path="/room" element={<Room />}></Route>
         <Route path="/user" element={<User />}></Route>
-        {/* <Route path="/customer" element={<Customer />}></Route>
-        <Route path="/historytransaksi" element={<HistoryTransaksi />}></Route> */}
+        {/* <Route path="/customer" element={<Customer />}></Route> */}
+        <Route path="/historytransaksi" element={<HistoryTransaksi />}></Route>
 
         {/* <Route path="/logincust" element={<LoginCust />}></Route>
         <Route path="/registercust" element={<RegisterCust />}></Route>

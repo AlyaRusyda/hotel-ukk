@@ -152,7 +152,7 @@ export default class User extends React.Component {
   };
 
   handleDrop = (id) => {
-    let url = "http://localhost:3000/user/" + id
+    let url = "http://localhost:3000/user/" + id;
     if (window.confirm("Are you sure to delete this customer ? ")) {
       axios
         .delete(url, this.headerConfig())
@@ -295,8 +295,7 @@ export default class User extends React.Component {
                                   <img
                                     className="h-10 w-10 rounded-full"
                                     src={
-                                      "http://localhost:3000/foto/" +
-                                      item.foto
+                                      "http://localhost:3000/foto/" + item.foto
                                     }
                                     alt=""
                                   />
@@ -339,9 +338,7 @@ export default class User extends React.Component {
                                   </button>
                                   <button
                                     className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
-                                    onClick={() =>
-                                      this.handleDrop(item.id)
-                                    }
+                                    onClick={() => this.handleDrop(item.id)}
                                   >
                                     <FontAwesomeIcon icon={faTrash} size="lg" />
                                   </button>
@@ -457,6 +454,7 @@ export default class User extends React.Component {
                       placeholder="Masukkan email user"
                       required
                       disabled={this.state.action === "update" ? true : false}
+                      autocomplete={this.state.password}
                     />
                   </div>
                   <div>
