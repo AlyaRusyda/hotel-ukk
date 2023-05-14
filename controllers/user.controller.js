@@ -149,12 +149,14 @@ exports.updateUser = (request, response) => {
 
     let dataUser = {
         nama_user: request.body.nama_user,
-        foto: request.file.filename,
+        // foto: request.file.filename,
         email: request.body.email,
         password: md5(request.body.password),
         role: request.body.role
     };
-
+    if (request.file && request.file.filename) {
+      dataUser.foto = request.file.filename;
+    }
     if (request.file) {
       const selectedUser = await userModel.findOne({
         where: { id: idUser },
@@ -162,7 +164,7 @@ exports.updateUser = (request, response) => {
 
       const oldFotoUser = selectedUser.foto;
 
-      const patchFoto = path.join(__dirname, `../foto_user`, oldFotoUser);
+      const patchFoto = path.join(__dirname, `../foto`, oldFotoUser);
 
       if (fs.existsSync(patchFoto)) {
         fs.unlink(patchFoto, (error) => console.log(error));

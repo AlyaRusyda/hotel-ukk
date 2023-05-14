@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faBed, faUsers, faUser, faHistory, faList } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faBed, faUser, faHistory, faList } from "@fortawesome/free-solid-svg-icons";
 
 export default class Sidebar extends React.Component {
     constructor() {

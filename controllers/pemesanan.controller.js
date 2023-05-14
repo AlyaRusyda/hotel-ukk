@@ -2,6 +2,7 @@ const pemesananModel = require(`../models/index`).pemesanan;
 const detailsOfPemesananModel = require(`../models/index`).detail_pemesanan;
 const userModel = require(`../models/index`).user;
 const roomModel = require(`../models/index`).kamar;
+const tipeKamarModel = require(`../models/index`).tipe_kamar;
 
 const Op = require(`sequelize`).Op;
 // const date = require(`date-and-time`);
@@ -19,6 +20,12 @@ exports.addPemesanan = async (request, response) => {
       [Op.and]: [{ nomor_kamar: { [Op.substring]: nomor_kamar } }],
     },
     attributes: ["id", "nomor_kamar", "tipeKamarId", "createdAt", "updatedAt"],
+    include: [
+      {
+        model: tipeKamarModel,
+        attributes: ["harga"],
+      },
+    ],
   });
 
   let nama_user = request.body.nama_user;
@@ -67,17 +74,17 @@ exports.addPemesanan = async (request, response) => {
         .create(newData)
         .then((result) => {
           let pemesananID = result.id;
-          let detailsOfPemesanan = request.body.details_of_pemesanan;
+          // let detailsOfPemesanan = request.body.details_of_pemesanan;
           let detailData = [];
 
-          for (let i = 0; i < diffDays; i++) {
+          for (let i = 0; i <= diffDays; i++) {
             let newDetail = {
               pemesananId: pemesananID,
               kamarId: room.id,
               tgl_akses: new Date(
                 tglCheckIn.getTime() + i * 24 * 60 * 60 * 1000
               ),
-              harga: detailsOfPemesanan[0].harga,
+              harga: room.tipe_kamar.harga,
             };
             detailData.push(newDetail);
           }

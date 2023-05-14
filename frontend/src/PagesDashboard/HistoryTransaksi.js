@@ -13,6 +13,7 @@ export default class HistoryTransaksi extends React.Component {
     this.state = {
       pemesanan: [],
       typeroom: [],
+      user: [],
       id: "",
       userId: "",
       tipeKamarId: "",
@@ -100,7 +101,7 @@ export default class HistoryTransaksi extends React.Component {
       axios
         .put(url, form, this.headerConfig())
         .then((response) => {
-          this.getBooking();
+          this.getAllPemesanan();
           this.handleClose();
         })
         .catch((error) => {
@@ -160,6 +161,21 @@ export default class HistoryTransaksi extends React.Component {
       });
   };
 
+  getUser = () => {
+    let url = "http://localhost:3000/user/getAll";
+    axios
+      .get(url, this.headerConfig())
+      .then((response) => {
+        this.setState({
+          user: response.data.data,
+        });
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   checkRole = () => {
     if (this.state.role !== "admin" && this.state.role !== "resepsionis") {
       localStorage.clear();
@@ -171,6 +187,7 @@ export default class HistoryTransaksi extends React.Component {
   componentDidMount() {
     this.getAllPemesanan();
     this.getTypeRoom();
+    this.getUser();
     this.checkRole();
   }
 
@@ -230,7 +247,19 @@ export default class HistoryTransaksi extends React.Component {
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
+                            Nama User
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
                             Nama Pemesan
+                          </th>
+                          <th
+                            scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          >
+                            Nama Tamu
                           </th>
                           <th
                             scope="col"
@@ -279,6 +308,7 @@ export default class HistoryTransaksi extends React.Component {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
+                        {console.log(this.state.pemesanan)}
                         {Array.isArray(this.state.pemesanan) &&
                           this.state.pemesanan.map((item, index) => {
                             return (
@@ -291,11 +321,23 @@ export default class HistoryTransaksi extends React.Component {
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="flex items-center">
+                                    <div className="text-sm font-medium text-gray-900">
+                                      {item.user?.nama_user}
+                                      {console.log(item.user?.nama_user)}
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">
                                     {item.nama_pemesan}
                                   </div>
                                 </td>
-
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <div className="text-sm text-gray-900">
+                                    {item.nama_tamu}
+                                  </div>
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     {item.tipe_kamar?.nama_tipe_kamar}
@@ -308,23 +350,17 @@ export default class HistoryTransaksi extends React.Component {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">
-                                    {moment(item.tgl_pemesanan).format(
-                                      "DD-MM-YYYY"
-                                    )}
+                                    {item.tgl_pemesanan}
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">
-                                    {moment(item.tgl_check_in).format(
-                                      "DD-MM-YYYY"
-                                    )}
+                                    {item.tgl_check_in}
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">
-                                    {moment(item.tgl_check_out).format(
-                                      "DD-MM-YYYY"
-                                    )}
+                                    {item.tgl_check_out}
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
@@ -447,6 +483,96 @@ export default class HistoryTransaksi extends React.Component {
             </div>
           </div>
         </div>
+
+        {/* Modal Form */}
+        {/* <div
+          id="modal_pemesanan"
+          tabindex="-1"
+          aria-hidden="true"
+          className="overflow-x-auto fixed top-0 left-0 right-0 z-50 hidden w-full p-4 md:inset-0 h-modal md:h-full bg-tranparent bg-black bg-opacity-50"
+        >
+          <div className="flex lg:h-auto w-auto justify-center ">
+            <div className="relative bg-white rounded-lg shadow dark:bg-white w-1/3">
+              <button
+                type="button"
+                className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                onClick={() => this.handleClose()}
+              >
+                <svg
+                  aria-hidden="true"
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span className="sr-only">Tutup modal</span>
+              </button>
+              <div className="px-6 py-6 lg:px-8">
+                <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-black">
+                  Add Pemesanan
+                </h3>
+                <form
+                  className="space-y-6"
+                  onSubmit={(event) => this.handleSave(event)}
+                >
+                  <div>
+                    <label
+                      for="nomor_pemesanan"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
+                    >
+                      Nomor Pemesanan
+                    </label>
+                    <input
+                      type="text"
+                      name="nomor_pemesanan"
+                      id="nomor_pemesanan"
+                      value={this.state.nomor_pemesanan}
+                      onChange={this.handleChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-gray-800"
+                      placeholder="Masukkan number of room"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="nomor_kamar"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
+                    >
+                      Nomor Kamar
+                    </label>
+                    <select
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black"
+                      placeholder="Nama Pemesan"
+                      name="nama_pemesan"
+                      value={this.state.nomor_kamar}
+                      onChange={this.handleChange}
+                      required
+                    >
+                      <option value="">Pilih Nomor Kamar</option>
+                      {this.state.typeroom.map((item) => (
+                        <option value={item.id}>
+                          {item.nama_tipe_kamar}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                  >
+                    Simpan
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div> */}
       </div>
     );
   }

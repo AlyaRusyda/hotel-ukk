@@ -118,6 +118,7 @@ export default class Room extends React.Component {
         .post(url, form, this.headerConfig())
         .then((response) => {
           this.getRoom();
+          this.getTypeRoom();
           this.handleClose();
         })
         .catch((error) => {
@@ -141,7 +142,7 @@ export default class Room extends React.Component {
   };
 
   handleDrop = (id) => {
-    let url = "http://localhost:3000/kamar/delete/" + id;
+    let url = "http://localhost:3000/kamar/" + id;
     if (window.confirm("Are you sure to delete this room")) {
       axios
         .delete(url, this.headerConfig())

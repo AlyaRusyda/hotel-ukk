@@ -138,7 +138,7 @@ export default class User extends React.Component {
           }
         });
     } else {
-      let url = "http://localhost:3000/user/" + this.state.id;
+      let url = "http://localhost:3000/user/update/" + this.state.id;
       axios
         .put(url, form, this.headerConfig())
         .then((response) => {
