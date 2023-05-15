@@ -211,12 +211,24 @@ exports.deletePemesanan = async (request, response) => {
 
 //mendapatkan semua data
 exports.getAllPemesanan = async (request, response) => {
-  const result = await pemesananModel.findAll();
+  const result = await pemesananModel.findAll({
+    include: {
+      model: tipeKamarModel,
+      attributes: ['nama_tipe_kamar']
+    }
+  });
+  if (result.length === 0) {
+    return response.json({
+      success: true,
+      data: [],
+      message: "Data tidak ditemukan",
+    })
+  }
 
   response.json({
     success: true,
-    data: result[0],
-    message: `All Transaction have been loaded`,
+    data: result,
+    message: `All Transaction have been loaded...`,
   });
 };
 

@@ -106,11 +106,15 @@ export default class Room extends React.Component {
   handleSave = (e) => {
     e.preventDefault();
 
-    let form = {
-      id: this.state.id,
-      nomor_kamar: this.state.nomor_kamar,
-      tipeKamarId: this.state.tipeKamarId,
-    };
+    // let form = {
+    //   id: this.state.id,
+    //   nomor_kamar: this.state.nomor_kamar,
+    //   tipeKamarId: this.state.tipeKamarId,
+    // };
+    let form = new FormData()
+    form.append("id", this.state.id)
+    form.append("nomor_kamar", this.state.nomor_kamar)
+    form.append("tipeKamarId", this.state.tipeKamarId)
 
     if (this.state.action === "insert") {
       let url = "http://localhost:3000/kamar/add";

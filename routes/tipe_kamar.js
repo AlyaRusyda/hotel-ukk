@@ -14,10 +14,10 @@ const tipeController = require("../controllers/tipe_kamar.controller");
 // const upload = require('../controller/upload-cover');
 const auth = require(`../auth/auth`)
 
-app.get("/getAll", auth.authVerify,tipeController.getAllType)
-app.post("/find", auth.authVerify,tipeController.findType)
-app.post("/", auth.authVerify,tipeController.addType)
-app.delete("/:id", auth.authVerify,tipeController.deleteType)
-app.put("/:id", auth.authVerify,tipeController.updateType)
+app.get("/getAll", auth.authVerify, tipeController.getAllType)
+app.post("/find", auth.authVerify, tipeController.findType)
+app.post("/", auth.authVerify, tipeController.addType)
+app.delete("/:id", auth.authVerify, tipeController.deleteType)
+app.put("/:id", auth.authVerify, tipeController.updateType)
 
 module.exports=app

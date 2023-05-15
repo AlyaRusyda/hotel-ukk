@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "../Components/Sidebar";
 import Header from "../Components/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilSquare, faSearch, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPencilSquare, faSearch } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import $ from "jquery";
 import moment from "moment";
@@ -101,7 +101,9 @@ export default class HistoryTransaksi extends React.Component {
       axios
         .put(url, form, this.headerConfig())
         .then((response) => {
-          this.getAllPemesanan();
+          this.getBooking();
+          this.getTypeRoom();
+          this.getUser();
           this.handleClose();
         })
         .catch((error) => {
@@ -132,8 +134,9 @@ export default class HistoryTransaksi extends React.Component {
       });
   };
 
-  getAllPemesanan = () => {
+  getBooking = () => {
     let url = "http://localhost:3000/pesan/getAll";
+    
     axios
       .get(url, this.headerConfig())
       .then((response) => {
@@ -169,7 +172,6 @@ export default class HistoryTransaksi extends React.Component {
         this.setState({
           user: response.data.data,
         });
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);
@@ -185,9 +187,9 @@ export default class HistoryTransaksi extends React.Component {
   };
 
   componentDidMount() {
-    this.getAllPemesanan();
-    this.getTypeRoom();
-    this.getUser();
+    this.getBooking();
+    // this.getTypeRoom();
+    // this.getUser();
     this.checkRole();
   }
 
@@ -219,14 +221,14 @@ export default class HistoryTransaksi extends React.Component {
                 >
                   <FontAwesomeIcon icon={faSearch} size="" />
                 </button>
-                {this.state.role === "admin" && (
+                {/* {this.state.role === "admin" && (
                   <button
                     className="w-1/3 ml-2 px-4 text-white bg-blue-600 rounded hover:bg-blue-700"
                     onClick={() => this.handleAdd()}
                   >
                     <FontAwesomeIcon icon={faPlus} size="" /> Add
                   </button>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -243,12 +245,12 @@ export default class HistoryTransaksi extends React.Component {
                           >
                             Nomor Pemesanan
                           </th>
-                          <th
+                          {/* <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
                             Nama User
-                          </th>
+                          </th> */}
                           <th
                             scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -297,7 +299,7 @@ export default class HistoryTransaksi extends React.Component {
                           >
                             Status
                           </th>
-                          {this.state.role === "resepsionis" && (
+                          {this.state.role === "admin" && (
                             <th
                               scope="col"
                               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -308,96 +310,91 @@ export default class HistoryTransaksi extends React.Component {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
-                        {console.log(this.state.pemesanan)}
-                        {Array.isArray(this.state.pemesanan) &&
-                          this.state.pemesanan.map((item, index) => {
-                            return (
-                              <tr key={index}>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="flex items-center">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {item.nomor_pemesanan}
-                                    </div>
+                        {/* {console.log(this.state.pemesanan)} */}
+                        {Array.isArray(this.state.pemesanan) && this.state.pemesanan.map((item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center">
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {item.nomor_pemesanan}
                                   </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="flex items-center">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {item.user?.nama_user}
-                                      {console.log(item.user?.nama_user)}
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {item.nama_pemesan}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {item.nama_tamu}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                    {item.tipe_kamar?.nama_tipe_kamar}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {item.nama_pemesan}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {item.nama_tamu}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                  {item.tipe_kamar?.nama_tipe_kamar}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {item.jumlah_kamar}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {moment(item.tgl_pemesanan).format(
+                                    "DD-MM-YYYY"
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {moment(item.tgl_check_in).format(
+                                    "DD-MM-YYYY"
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900">
+                                  {moment(item.tgl_check_out).format(
+                                    "DD-MM-YYYY"
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {item.status_pemesanan === "baru" && (
+                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                    {item.status_pemesanan}
                                   </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {item.jumlah_kamar}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {item.tgl_pemesanan}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {item.tgl_check_in}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  <div className="text-sm text-gray-900">
-                                    {item.tgl_check_out}
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap">
-                                  {item.status_pemesanan === "baru" && (
-                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                                      {item.status_pemesanan}
-                                    </span>
-                                  )}
-                                  {item.status_pemesanan === "check_in" && (
-                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                      {item.status_pemesanan}
-                                    </span>
-                                  )}
-                                  {item.status_pemesanan === "check_out" && (
-                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                      {item.status_pemesanan}
-                                    </span>
-                                  )}
-                                </td>
-                                {this.state.role === "resepsionis" && (
-                                  <td className="px-6 py-4 whitespace-nowrap">
-                                    <button
-                                      class="bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded mr-2"
-                                      onClick={() =>
-                                        this.handleEditStatus(item)
-                                      }
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faPencilSquare}
-                                        size="lg"
-                                      />
-                                    </button>
-                                  </td>
                                 )}
-                              </tr>
-                            );
-                          })}
+                                {item.status_pemesanan === "check_in" && (
+                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    {item.status_pemesanan}
+                                  </span>
+                                )}
+                                {item.status_pemesanan === "check_out" && (
+                                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    {item.status_pemesanan}
+                                  </span>
+                                )}
+                              </td>
+                              {this.state.role === "admin" && (
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                  <button
+                                    class="bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded mr-2"
+                                    onClick={() => this.handleEditStatus(item)}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faPencilSquare}
+                                      size="lg"
+                                    />
+                                  </button>
+                                </td>
+                              )}
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -453,7 +450,7 @@ export default class HistoryTransaksi extends React.Component {
                 >
                   <div>
                     <label
-                      for="role"
+                      for="status_pemesanan"
                       class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
                     >
                       Status
@@ -461,7 +458,7 @@ export default class HistoryTransaksi extends React.Component {
                     <select
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-gray-800 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:text-black"
                       placeholder="Pilihan status"
-                      name="booking_status"
+                      name="status_pemesanan"
                       value={this.state.status_pemesanan}
                       onChange={this.handleChange}
                       required
@@ -577,3 +574,4 @@ export default class HistoryTransaksi extends React.Component {
     );
   }
 }
+
