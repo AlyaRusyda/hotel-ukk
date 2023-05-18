@@ -114,11 +114,11 @@ export default class HistoryTransaksi extends React.Component {
 
   _handleFilter = () => {
     let data = {
-      keyword: this.state.keyword,
+      status: this.state.keyword,
     };
-    let url = "http://localhost:3000/pesan/find";
+    let url = "http://localhost:3000/pesan/find/";
     axios
-      .post(url, data)
+      .get(url, data, this.headerConfig())
       .then((response) => {
         if (response.status === 200) {
           this.setState({
@@ -135,7 +135,7 @@ export default class HistoryTransaksi extends React.Component {
   };
 
   getBooking = () => {
-    let url = "http://localhost:3000/pesan/getAll";
+    let url = "http://localhost:3000/pesan/getAll/";
 
     axios
       .get(url, this.headerConfig())
@@ -299,7 +299,7 @@ export default class HistoryTransaksi extends React.Component {
                           >
                             Status
                           </th>
-                          {this.state.role === "admin" && (
+                          {this.state.role === "resepsionis" && (
                             <th
                               scope="col"
                               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -380,7 +380,7 @@ export default class HistoryTransaksi extends React.Component {
                                     </span>
                                   )}
                                 </td>
-                                {this.state.role === "admin" && (
+                                {this.state.role === "resepsionis" && (
                                   <td className="px-6 py-4 whitespace-nowrap">
                                     <button
                                       className={`bg-green-600 hover:bg-green-700 text-white py-1 px-2 rounded mr-2 ${
@@ -581,6 +581,6 @@ export default class HistoryTransaksi extends React.Component {
           </div>
         </div> */}
       </div>
-    );
-  }
+    );
+  }
 }
