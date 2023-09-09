@@ -15,6 +15,7 @@ const roomController = require("../controllers/kamar.controller");
 const auth = require(`../auth/auth`)
 
 app.get("/getAll", auth.authVerify, roomController.getAllKamar)
+app.get("/:id", auth.authVerify, roomController.getKamarById)
 app.post("/getAvailable", auth.authVerify, roomController.availableRoom)
 app.post("/find", auth.authVerify, roomController.findKamar)
 app.post("/add", auth.authVerify, roomController.addKamar)

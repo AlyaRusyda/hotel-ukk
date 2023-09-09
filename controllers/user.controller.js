@@ -37,7 +37,7 @@ exports.login = async (request,response) => {
       console.log(findUser)
       //generate jwt token
       let tokenPayLoad = {
-          id_user: findUser.id_costumer,
+          id: findUser.id,
           email: findUser.email,
           role: findUser.role,
       };
@@ -48,7 +48,8 @@ exports.login = async (request,response) => {
           message: "Success login",
           data:{
               token: token,
-              id_user: findUser.id_user,
+              id: findUser.id,
+              nama_user: findUser.nama_user,
               email: findUser.email,
               role: findUser.role,
           },
@@ -64,22 +65,15 @@ exports.login = async (request,response) => {
 
 //mendaptkan semua data dalam tabel
 exports.getAllUser = async (request, response) => {
-  let user = await userModel.findAll();
+  let user = await userModel.findAll({
+    order: [['createdAt', 'DESC']],
+  });
   return response.json({
     success: true,
     data: user,
     message: `All User have been loaded`,
   });
 };
-
-// exports.countUser = async (request, response) => {
-//   let user = await sequelize.query("SELECT COUNT(*) FROM users");
-//   return response.json({
-//     success: true,
-//     jumlah_user: user[0],
-//     message: `All User have been loaded`,
-//   });
-// };
 
 //mendaptkan salah satu data dalam tabel (where clause)
 exports.findUser = async (request, response) => {

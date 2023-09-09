@@ -406,7 +406,7 @@ export default class User extends React.Component {
                       for="nama_user"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-800"
                     >
-                      Username User
+                      Username
                     </label>
                     <input
                       type="text"

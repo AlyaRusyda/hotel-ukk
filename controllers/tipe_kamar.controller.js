@@ -16,21 +16,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //mendaptkan semua data dalam tabel
 exports.getAllType = async (request, response) => {
-  let tipe = await tipeModel.findAll();
-  return response.json({
-    success: true,
-    data: tipe,
-    message: `All room have been loaded`,
-  });
+  try {
+    let tipe = await tipeModel.findAll({
+      order: [['createdAt', 'DESC']], // Ganti 'createdAt' dengan field yang sesuai
+    });
+
+    return response.json({
+      success: true,
+      data: tipe,
+      message: `All room have been loaded in descending order`,
+    });
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    return response.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
 };
+
 
 //mendaptkan salah satu data dalam tabel (where clause)
 exports.findType = async (request, response) => {
-  let name = request.body.nama_tipe_kamar;
+  let keyword = request.body.keyword;
 
   let tipe = await tipeModel.findOne({
     where: {
-      [Op.and]: [{ nama_tipe_kamar: { [Op.substring]: name } }],
+      [Op.and]: [{ nama_tipe_kamar: { [Op.substring]: keyword } }],
     },
   });
   return response.json({

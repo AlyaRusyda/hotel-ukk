@@ -13,7 +13,26 @@ exports.getAllKamar = async (request, response) => {
   let kamars = await kamarModel.findAll({
     include: {
       model: tipeKamarModel,
-      attributes: ['nama_tipe_kamar']
+      attributes: ['nama_tipe_kamar', 'harga']
+    },
+    order: [['createdAt', 'DESC']]
+  });
+  return response.json({
+    success: true,
+    data: kamars,
+    message: "All rooms have been loaded",
+  });
+};
+
+exports.getKamarById = async (request, response) => {
+  let id = request.params.id
+  let kamars = await kamarModel.findAll({
+    include: {
+      model: tipeKamarModel,
+      attributes: ['nama_tipe_kamar', 'harga']
+    },
+    where: {
+      id: id
     }
   });
   return response.json({
@@ -139,12 +158,13 @@ exports.deleteKamar = (request, response) => {
       });
     });
 };
+
 exports.availableRoom = async (request, response) => {
-  const tgl_akses_satu = request.body.tgl_akses_satu;
-  const tgl_akses_dua = request.body.tgl_akses_dua;
+  const tgl_check_in = request.body.tgl_check_in;
+  const tgl_check_out = request.body.tgl_check_out;
 
   const result = await sequelize.query(
-    `SELECT tipe_kamars.nama_tipe_kamar, kamars.nomor_kamar FROM kamars LEFT JOIN tipe_kamars ON kamars.tipeKamarId = tipe_kamars.id LEFT JOIN detail_pemesanans ON detail_pemesanans.kamarId = kamars.id WHERE kamars.id NOT IN (SELECT kamarId from detail_pemesanans WHERE tgl_akses BETWEEN '${tgl_akses_satu}' AND '${tgl_akses_dua}')`
+    `SELECT tipe_kamars.nama_tipe_kamar, tipe_kamars.foto, tipe_kamars.harga, kamars.nomor_kamar FROM kamars LEFT JOIN tipe_kamars ON kamars.tipeKamarId = tipe_kamars.id LEFT JOIN detail_pemesanans ON detail_pemesanans.kamarId = kamars.id WHERE kamars.id NOT IN (SELECT kamarId from detail_pemesanans WHERE tgl_akses BETWEEN '${tgl_check_in}' AND '${tgl_check_out}') GROUP BY kamars.nomor_kamar`
   );
 
   return response.json({
