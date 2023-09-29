@@ -73,7 +73,7 @@ exports.addPemesanan = async (request, response) => {
     let randomString = crypto.randomBytes(10).toString('hex');
     let tgl_pesan = `${tgl}-${randomString}`;
     let newData = {
-      nomor_pemesanan: tgl_pesan  ,
+      nomor_pemesanan: tgl_pesan,
       nama_pemesan: request.body.nama_pemesan,
       email_pemesan: request.body.email_pemesan,
       tgl_pemesanan: Date.now(),
@@ -341,7 +341,12 @@ exports.getByUser = async (request, response) => {
   const result = await pemesananModel.findAll({
     where: {
       userId : userId
-    }
+    },
+    include: {
+      model: tipeKamarModel,
+      attributes: ['nama_tipe_kamar']
+    },
+    order: [['createdAt', 'DESC']],
   });
   if (result.length === 0) {
     return response.json({

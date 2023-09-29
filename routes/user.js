@@ -18,7 +18,7 @@ app.post("/login", userController.login)
 app.get("/getAll", auth.authVerify,userController.getAllUser)
 // app.get("/count", auth.authVerify, userController.countUser)
 app.post("/find",auth.authVerify, userController.findUser)
-app.post("/add", auth.authVerify, userController.addUser)
+app.post("/add", userController.addUser)
 app.delete("/:id", auth.authVerify, userController.deleteUser)
 app.put("/update/:id", auth.authVerify, userController.updateUser)
 

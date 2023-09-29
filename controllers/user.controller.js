@@ -143,9 +143,7 @@ exports.updateUser = (request, response) => {
 
     let dataUser = {
         nama_user: request.body.nama_user,
-        // foto: request.file.filename,
         email: request.body.email,
-        password: md5(request.body.password),
         role: request.body.role
     };
     if (request.file && request.file.filename) {

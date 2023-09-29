@@ -103,7 +103,6 @@ exports.updateType = (request, response) => {
       nama_tipe_kamar: request.body.nama_tipe_kamar,
       harga: request.body.harga,
       deskripsi: request.body.deskripsi,
-      // foto: request.file.filename,
     };
     if (request.file && request.file.filename) {
       dataType.foto = request.file.filename;

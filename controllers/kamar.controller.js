@@ -141,6 +141,7 @@ exports.updateKamar = async (request, response) => {
     });
 };
 
+
 exports.deleteKamar = (request, response) => {
   let id = request.params.id;
   kamarModel
