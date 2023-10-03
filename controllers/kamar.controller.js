@@ -59,6 +59,27 @@ exports.findKamar = async (request, response) => {
   });
 };
 
+exports.findKamarById = async (request, response) => {
+  let idRoom = request.params.id;
+
+  const result = await sequelize.query(
+    `SELECT kamars.id,kamars.nomor_kamar,kamars.tipeKamarId, tipe_kamars.nama_tipe_kamar FROM kamars JOIN tipe_kamars ON tipe_kamars.id = kamars.tipeKamarId where kamars.id = ${idRoom} ORDER BY kamars.id ASC `
+  );
+
+  if (result[0].length === 0) {
+    return response.status(400).json({
+      success: false,
+      message: "nothing kamar to show",
+    });
+  }
+
+  return response.json({
+    success: true,
+    data: result[0],
+    message: `Room have been loaded`,
+  });
+};
+
 exports.addKamar = async (request, response) => {
   let nama_tipe_kamar = request.body.nama_tipe_kamar;
   let tipeId = await tipeKamarModel.findOne({
@@ -160,10 +181,34 @@ exports.deleteKamar = (request, response) => {
     });
 };
 
+exports.availableByType = async (request,response)=>{
+  const nama_tipe = request.body.nama_tipe
+  const tgl_akses_satu = request.body.check_in;
+  const tgl_akses_dua = request.body.check_out;
+
+  const result = await sequelize.query(
+    `SELECT tipe_kamars.nama_tipe_kamar, kamars.nomor_kamar FROM kamars LEFT JOIN tipe_kamars ON kamars.tipeKamarId = tipe_kamars.id LEFT JOIN detail_pemesanans ON detail_pemesanans.kamarId = kamars.id WHERE tipe_kamars.nama_tipe_kamar='${nama_tipe}' AND kamars.id NOT IN (SELECT kamarId from detail_pemesanans WHERE tgl_akses BETWEEN '${tgl_akses_satu}' AND '${tgl_akses_dua}') GROUP BY kamars.nomor_kamar`
+  );
+
+  if (result[0].length === 0) {
+    return response.json({
+      success: false,
+      data: `nothing type room available`,
+    });
+  }
+
+  return response.json({
+    success: true,
+    sisa_kamar: result[0].length,
+    data: result[0],
+    message: `Room have been loaded`
+  });
+}
+
 exports.availableRoom = async (request, response) => {
   const tgl_check_in = request.body.tgl_check_in;
   const tgl_check_out = request.body.tgl_check_out;
-
+  
   const result = await sequelize.query(
     `SELECT tipe_kamars.nama_tipe_kamar, tipe_kamars.foto, tipe_kamars.harga, kamars.nomor_kamar FROM kamars LEFT JOIN tipe_kamars ON kamars.tipeKamarId = tipe_kamars.id LEFT JOIN detail_pemesanans ON detail_pemesanans.kamarId = kamars.id WHERE kamars.id NOT IN (SELECT kamarId from detail_pemesanans WHERE tgl_akses BETWEEN '${tgl_check_in}' AND '${tgl_check_out}') GROUP BY kamars.nomor_kamar`
   );

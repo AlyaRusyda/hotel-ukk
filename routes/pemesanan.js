@@ -19,8 +19,8 @@ app.get("/find",auth.authVerify, pemesananController.find)
 app.get("/getByUser/:id", auth.authVerify, pemesananController.getByUser)
 app.post("/",auth.authVerify, pemesananController.addPemesanan)
 app.delete("/:id", auth.authVerify, pemesananController.deletePemesanan)
-app.put("/:id", auth.authVerify, pemesananController.updatePemesanan)
+// app.put("/:id", auth.authVerify, pemesananController.updatePemesanan)
 app.put("/status/:id", auth.authVerify, pemesananController.updateStatusBooking)
-app.get("/get/:id", auth.authVerify, pemesananController.getPemesananById)
+app.get("/get/:id", auth.authVerify, pemesananController.getById)
 
 module.exports=app
