@@ -52,6 +52,7 @@ exports.login = async (request,response) => {
               nama_user: findUser.nama_user,
               email: findUser.email,
               role: findUser.role,
+              foto: findUser.foto
           },
       });
   } catch (error){

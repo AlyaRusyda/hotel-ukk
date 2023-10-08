@@ -15,179 +15,176 @@ const sequelize = new Sequelize("wikuhotel", "root", "", {
 });
 
 //tambah data
-exports.addPemesananNew = async (request, response) => {
-  console.log(request.body.nama_user, "lklkk");
-  let tipe_kamar = request.body.tipe_kamar;
-  let nama_user = request.body.nama_user;
+// exports.addPemesananNew = async (request, response) => {
+//   console.log(request.body.nama_user, "lklkk");
+//   let tipe_kamar = request.body.tipe_kamar;
+//   let nama_user = request.body.nama_user;
 
-  let tipe = await tipeKamarModel.findOne({
-    where: {
-      [Op.or]: [{ nama_tipe_kamar: { [Op.substring]: tipe_kamar } }],
-    },
-  });
-  if (tipe == null) {
-    return response.status(404).json({
-      success: false,
-      message: `Tipe Kamar ${tipe_kamar} tidak ditemukan`,
-    });
-  }
+//   let tipe = await tipeKamarModel.findOne({
+//     where: {
+//       [Op.or]: [{ nama_tipe_kamar: { [Op.substring]: tipe_kamar } }],
+//     },
+//   });
+//   if (tipe == null) {
+//     return response.status(404).json({
+//       success: false,
+//       message: `Tipe Kamar ${tipe_kamar} tidak ditemukan`,
+//     });
+//   }
 
-  let bookedRooms = await sequelize.query(
-    `SELECT kamarId FROM detail_pemesanans WHERE tgl_akses BETWEEN "${request.body.tgl_check_in}" AND "${request.body.tgl_check_out}"`
-  );
-  let bookedRoomIds = bookedRooms[0].map((row) => row.kamarId);
-  let room = await roomModel.findOne({
-    where: {
-      [Op.and]: [{ nomor_kamar: { [Op.substring]: nomor_kamar } }],
-    },
-    attributes: ["id", "nomor_kamar", "tipeKamarId", "createdAt", "updatedAt"],
-    include: [
-      {
-        model: tipeKamarModel,
-        attributes: ["harga"],
-      },
-    ],
-  });
+//   let bookedRooms = await sequelize.query(
+//     `SELECT kamarId FROM detail_pemesanans WHERE tgl_akses BETWEEN "${request.body.tgl_check_in}" AND "${request.body.tgl_check_out}"`
+//   );
+//   let bookedRoomIds = bookedRooms[0].map((row) => row.kamarId);
+//   let room = await roomModel.findOne({
+//     where: {
+//       [Op.and]: [{ nomor_kamar: { [Op.substring]: nomor_kamar } }],
+//     },
+//     attributes: ["id", "nomor_kamar", "tipeKamarId", "createdAt", "updatedAt"],
+//     include: [
+//       {
+//         model: tipeKamarModel,
+//         attributes: ["harga"],
+//       },
+//     ],
+//   });
 
-  let rooms = await kamar.findAll({
-    where: {
-      [Op.and]: [
-        { tipeKamarId: tipe.id },
-        { id: { [Op.notIn]: bookedRoomIds } },
-      ],
-    },
-  });
+//   let rooms = await kamar.findAll({
+//     where: {
+//       [Op.and]: [
+//         { tipeKamarId: tipe.id },
+//         { id: { [Op.notIn]: bookedRoomIds } },
+//       ],
+//     },
+//   });
 
-  let user = await userModel.findOne({
-    where: {
-      [Op.or]: [{ nama_user: { [Op.substring]: nama_user } }],
-    },
-  });
+//   let user = await userModel.findOne({
+//     where: {
+//       [Op.or]: [{ nama_user: { [Op.substring]: nama_user } }],
+//     },
+//   });
 
-  if (rooms.length === 0) {
-    return response.json({
-      success: false,
-      message: `Kamar sudah habis`,
-    });
-  } else if (user === null) {
-    return response.json({
-      success: false,
-      message: `User yang anda inputkan tidak ditemukan`,
-    });
-  } else {
-    let date = moment();
-    let tgl = date.format("YYYY-MM-DD");
-    let randomString = crypto.randomBytes(10).toString("hex");
-    let tgl_pesan = `${tgl}-${randomString}`;
-    let newData = {
-      nomor_pemesanan: tgl_pesan,
-      nama_pemesan: request.body.nama_pemesan,
-      email_pemesan: request.body.email_pemesan,
-      tgl_pemesanan: Date.now(),
-      tgl_check_in: request.body.tgl_check_in,
-      tgl_check_out: request.body.tgl_check_out,
-      nama_tamu: request.body.nama_tamu,
-      jumlah_kamar: request.body.jumlah_kamar,
-      tipeKamarId: tipe.id,
-      status_pemesanan: "baru",
-      userId: user.id,
-    };
-    let roomCheck = await sequelize.query(
-      `SELECT * FROM detail_pemesanans WHERE kamarId = ${newData.tipeKamarId} AND tgl_akses= "${request.body.tgl_check_in}"`
-    );
+//   if (rooms.length === 0) {
+//     return response.json({
+//       success: false,
+//       message: `Kamar sudah habis`,
+//     });
+//   } else if (user === null) {
+//     return response.json({
+//       success: false,
+//       message: `User yang anda inputkan tidak ditemukan`,
+//     });
+//   } else {
+//     let date = moment();
+//     let tgl = date.format("YYYY-MM-DD");
+//     let randomString = crypto.randomBytes(10).toString("hex");
+//     let tgl_pesan = `${tgl}-${randomString}`;
+//     let newData = {
+//       nomor_pemesanan: tgl_pesan,
+//       nama_pemesan: request.body.nama_pemesan,
+//       email_pemesan: request.body.email_pemesan,
+//       tgl_pemesanan: Date.now(),
+//       tgl_check_in: request.body.tgl_check_in,
+//       tgl_check_out: request.body.tgl_check_out,
+//       nama_tamu: request.body.nama_tamu,
+//       jumlah_kamar: request.body.jumlah_kamar,
+//       tipeKamarId: tipe.id,
+//       status_pemesanan: "baru",
+//       userId: user.id,
+//     };
+//     let roomCheck = await sequelize.query(
+//       `SELECT * FROM detail_pemesanans WHERE kamarId = ${newData.tipeKamarId} AND tgl_akses= "${request.body.tgl_check_in}"`
+//     );
 
-    if (roomCheck[0].length === 0) {
-      let success = true;
-      let message = "";
+//     if (roomCheck[0].length === 0) {
+//       let success = true;
+//       let message = "";
 
-      let availableRooms = rooms.slice(0, newData.jumlah_kamar);
+//       let availableRooms = rooms.slice(0, newData.jumlah_kamar);
 
-      if (availableRooms.length < newData.jumlah_kamar) {
-        return response.json({
-          success: false,
-          message: `Hanya tersedia ${availableRooms.length} kamar untuk tipe kamar ${tipe_kamar}`,
-        });
-      }
-      pemesananModel
-        .create(newData)
-        .then((result) => {
-          let pemesananID = result.id;
-          let detail_pemesanan = tipe.harga;
+//       if (availableRooms.length < newData.jumlah_kamar) {
+//         return response.json({
+//           success: false,
+//           message: `Hanya tersedia ${availableRooms.length} kamar untuk tipe kamar ${tipe_kamar}`,
+//         });
+//       }
+//       pemesananModel
+//         .create(newData)
+//         .then((result) => {
+//           let pemesananID = result.id;
+//           let detail_pemesanan = tipe.harga;
 
-          let tgl_check_in = moment(request.body.tgl_check_in, "YYYY-MM-DD");
-          let tgl_check_out = moment(request.body.tgl_check_out, "YYYY-MM-DD");
-          let totalDays = tgl_check_out.diff(tgl_check_in, "days");
+//           let tgl_check_in = moment(request.body.tgl_check_in, "YYYY-MM-DD");
+//           let tgl_check_out = moment(request.body.tgl_check_out, "YYYY-MM-DD");
+//           let totalDays = tgl_check_out.diff(tgl_check_in, "days");
 
-          let totalHarga = tipe.harga * newData.jumlah_kamar * totalDays;
+//           let totalHarga = tipe.harga * newData.jumlah_kamar * totalDays;
 
-          for (let i = 0; i < detail_pemesanan.length; i++) {
-            detail_pemesanan[i].pemesananId = pemesananID;
-          }
+//           for (let i = 0; i < detail_pemesanan.length; i++) {
+//             detail_pemesanan[i].pemesananId = pemesananID;
+//           }
 
-          for (
-            let m = moment(newData.tgl_check_in, "YYYY-MM-DD");
-            m.isBefore(newData.tgl_check_out);
-            m.add(1, "days")
-          ) {
-            let date = m.format("YYYY-MM-DD");
+//           for (
+//             let m = moment(newData.tgl_check_in, "YYYY-MM-DD");
+//             m.isBefore(newData.tgl_check_out);
+//             m.add(1, "days")
+//           ) {
+//             let date = m.format("YYYY-MM-DD");
 
-            for (let i = 0; i < availableRooms.length; i++) {
-              let roomNumber =
-                availableRooms.length > 1
-                  ? `${availableRooms[i].nomor_kamar}-${
-                      m.diff(
-                        moment(request.body.tgl_check_in, "YYYY-MM-DD"),
-                        "days"
-                      ) + 1
-                    }`
-                  : availableRooms[i].nomor_kamar;
+//             for (let i = 0; i < availableRooms.length; i++) {
+//               let roomNumber =
+//                 availableRooms.length > 1
+//                   ? `${availableRooms[i].nomor_kamar}-${
+//                       m.diff(
+//                         moment(request.body.tgl_check_in, "YYYY-MM-DD"),
+//                         "days"
+//                       ) + 1
+//                     }`
+//                   : availableRooms[i].nomor_kamar;
 
-              let newDetail = {
-                pemesananId: pemesananID,
-                kamarId: availableRooms[i].id,
-                tgl_akses: date,
-                harga: totalHarga,
-                nomor_kamar: roomNumber,
-              };
+//               let newDetail = {
+//                 pemesananId: pemesananID,
+//                 kamarId: availableRooms[i].id,
+//                 tgl_akses: date,
+//                 harga: totalHarga,
+//                 nomor_kamar: roomNumber,
+//               };
 
-              detailsOfPemesananModel.create(newDetail).catch((error) => {
-                success = false;
-                message = error.message;
-              });
-            }
-          }
+//               detailsOfPemesananModel.create(newDetail).catch((error) => {
+//                 success = false;
+//                 message = error.message;
+//               });
+//             }
+//           }
 
-          if (success) {
-            return response.json({
-              success: true,
-              message: `New transactions have been inserted`,
-            });
-          } else {
-            return response.json({
-              success: false,
-              message: message,
-            });
-          }
-        })
-        .catch((error) => {
-          return response.json({
-            success: false,
-            message: error.message,
-          });
-        });
-    } else {
-      return response.json({
-        success: false,
-        message: `Kamar yang anda pesan sudah di booking`,
-      });
-    }
-  }
-};
+//           if (success) {
+//             return response.json({
+//               success: true,
+//               message: `New transactions have been inserted`,
+//             });
+//           } else {
+//             return response.json({
+//               success: false,
+//               message: message,
+//             });
+//           }
+//         })
+//         .catch((error) => {
+//           return response.json({
+//             success: false,
+//             message: error.message,
+//           });
+//         });
+//     } else {
+//       return response.json({
+//         success: false,
+//         message: `Kamar yang anda pesan sudah di booking`,
+//       });
+//     }
+//   }
+// };
 
 exports.addPemesanan = async (request, response) => {
-  //cek nama_user
-  console.log(request.body.nama_user, "lklkk");
-
   let nama_user = request.body.nama_user;
   let userId = await userModel.findOne({
     where: {

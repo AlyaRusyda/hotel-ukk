@@ -111,7 +111,7 @@ exports.addKamar = async (request, response) => {
       where: {
         [Op.and]: [
           { nomor_kamar: newRoom.nomor_kamar },
-          { tipeKamarId: newRoom.tipeKamarId },
+          // { tipeKamarId: newRoom.tipeKamarId },
         ],
       },
       attributes: ["id", "nomor_kamar", "tipeKamarId"],
