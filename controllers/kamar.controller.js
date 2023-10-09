@@ -210,7 +210,7 @@ exports.availableRoom = async (request, response) => {
   const tgl_check_out = request.body.tgl_check_out;
   
   const result = await sequelize.query(
-    `SELECT tipe_kamars.nama_tipe_kamar, tipe_kamars.foto, tipe_kamars.harga, kamars.nomor_kamar FROM kamars LEFT JOIN tipe_kamars ON kamars.tipeKamarId = tipe_kamars.id LEFT JOIN detail_pemesanans ON detail_pemesanans.kamarId = kamars.id WHERE kamars.id NOT IN (SELECT kamarId from detail_pemesanans WHERE tgl_akses BETWEEN '${tgl_check_in}' AND '${tgl_check_out}') GROUP BY kamars.nomor_kamar`
+    `SELECT DISTINCT tipe_kamars.* FROM tipe_kamars LEFT JOIN kamars ON tipe_kamars.id = kamars.tipeKamarId WHERE tipe_kamars.id IN (SELECT kamars.tipeKamarId FROM kamars LEFT JOIN tipe_kamars ON kamars.tipeKamarId = tipe_kamars.id LEFT JOIN detail_pemesanans ON detail_pemesanans.kamarId = kamars.id WHERE kamars.id NOT IN (SELECT kamarId from detail_pemesanans WHERE tgl_akses BETWEEN '${tgl_check_in}' AND '${tgl_check_out}') GROUP BY kamars.nomor_kamar);`
   );
 
   return response.json({
