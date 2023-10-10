@@ -136,7 +136,20 @@ exports.updateType = (request, response) => {
       }
       dataType.foto = request.file.filename;
     }
-
+    // let tipe = await tipeModel.findAll({
+    //   where: {
+    //     [Op.and]: [
+    //       { nama_tipe_kamar: dataType.nama_tipe_kamar },
+    //     ],
+    //   },
+    //   attributes: ["id", "nama_tipe_kamar", "harga", "deskripsi", "foto"],
+    // });
+    // if (tipe.length > 0) {
+    //   return response.json({
+    //     success: false,
+    //     message: `Tipe kamar yang anda inputkan sudah ada`,
+    //   });
+    // }
     tipeModel
       .update(dataType, { where: { id: idType } })
       .then((result) => {
