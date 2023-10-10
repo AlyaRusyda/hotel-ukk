@@ -5,7 +5,6 @@ const roomModel = require(`../models/index`).kamar;
 const tipeKamarModel = require(`../models/index`).tipe_kamar;
 const moment = require(`moment`);
 const randomstring = require("randomstring");
-const crypto = require("crypto");
 const Op = require(`sequelize`).Op;
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize("wikuhotel", "root", "", {
@@ -296,27 +295,6 @@ exports.getByUser = async (request, response) => {
     message: `All Transaction have been loaded...`,
   });
 };
-
-// exports.getById = async (request, response) => {
-//   let pesanId = request.params.id;
-
-//   let result = await sequelize.query(
-//     `SELECT pemesanan.id, pemesanan.nomor_pemesanan, pemesanan.nama_pemesan, pemesanan.email_pemesan, pemesanan.tgl_pemesanan, pemesanan.tgl_check_in, pemesanan.tgl_check_out, pemesanan.nama_tamu, pemesanan.jumlah_kamar, pemesanan.tipeKamarId, tipe_kamar.nama_tipe_kamar, tipe_kamar.harga, detail_pemesanan.kamarId, kamar.nomor_kamar, user.id AS userId, user.nama_user FROM pemesanans AS pemesanan LEFT OUTER JOIN tipe_kamars AS tipe_kamar ON pemesanan.tipeKamarId = tipe_kamar.id LEFT OUTER JOIN users AS user ON pemesanan.userId = user.id LEFT OUTER JOIN detail_pemesanans AS detail_pemesanan ON pemesanan.id = detail_pemesanan.pemesananId JOIN kamars AS kamar ON kamar.id = detail_pemesanan.kamarId WHERE pemesanan.id = ${pesanId} ORDER BY pemesanan.createdAt DESC;`
-//   );
-//   console.log(result)
-//   if (result.length === 0) {
-//     return response.json({
-//       success: true,
-//       data: [],
-//       message: "Data tidak ditemukan",
-//     });
-//   }
-//   response.json({
-//     success: true,
-//     data: result[0],
-//     message: `All Transaction have been loaded...`,
-//   });
-// };
 
 exports.getById = async (request, response) => {
   let pesanId = request.params.id;

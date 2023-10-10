@@ -7,11 +7,7 @@ const Op = require(`sequelize`).Op;
 const path = require(`path`);
 const fs = require(`fs`);
 const upload = require(`./uploadUser`).single(`foto`);
-const Sequelize = require("sequelize");
-const sequelize = new Sequelize("wikuhotel", "root", "", {
-  host: "localhost",
-  dialect: "mysql",
-});
+
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

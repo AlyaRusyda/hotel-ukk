@@ -1,5 +1,3 @@
-const { request, response } = require("express");
-const { findTipekamar } = require("./tipe_kamar.controller");
 const kamarModel = require("../models/index").kamar;
 const tipeKamarModel = require("../models/index").tipe_kamar;
 const Op = require("sequelize").Op;
