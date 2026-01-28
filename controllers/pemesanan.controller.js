@@ -225,49 +225,6 @@ exports.addPemesanan = async (request, response) => {
   }
 };
 
-//delete data
-// exports.deletePemesanan = async (request, response) => {
-//   let pemesananID = request.params.id;
-//   let getId = await pemesananModel.findAll({
-//     where: {
-//       [Op.and]: [{ id: pemesananID }],
-//     },
-//   });
-//   if (getId.length === 0) {
-//     return response.json({
-//       success: false,
-//       message: "Transaksi dengan id tersebut tidak ada",
-//     });
-//   }
-
-//   detailsOfPemesananModel
-//     .destroy({
-//       where: { pemesananId: pemesananID },
-//     })
-//     .then((result) => {
-//       pemesananModel
-//         .destroy({ where: { id: pemesananID } })
-//         .then((result) => {
-//           return response.json({
-//             success: true,
-//             message: `Transaction has been deleted`,
-//           });
-//         })
-//         .catch((error) => {
-//           return response.json({
-//             success: false,
-//             message: error.message,
-//           });
-//         });
-//     })
-//     .catch((error) => {
-//       return response.json({
-//         success: false,
-//         message: error.message,
-//       });
-//     });
-// };
-
 exports.getByUser = async (request, response) => {
   let userId = request.params.id;
 
